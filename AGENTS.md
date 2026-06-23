@@ -1,8 +1,7 @@
-# CLAUDE.md — Memoria del proyecto
+# AGENTS.md — Memoria del proyecto
 
-> Contexto base para copilotos de IA (Claude Code / Cursor) sobre este repo.
-> En la Sesión 3 formalizamos esta memoria como `AGENTS.md` y la enlazamos con
-> `ln -s AGENTS.md CLAUDE.md` para que sea agnóstica de la herramienta.
+> Source of truth multi-tool para copilotos de IA (Claude Code, Cursor, Copilot, Codex…).
+> Claude Code lo lee a través del symlink `CLAUDE.md → AGENTS.md`.
 
 ## Qué es este proyecto
 
@@ -33,6 +32,7 @@ conductor del máster AI4Devs. Monorepo con dos apps independientes:
 - `npm run migration:fresh` — recrea la BD desde cero
 - `npm run typecheck` — `tsc --noEmit`
 - `node ace list:routes` — inspecciona el árbol de rutas
+- `node ace test` — ejecuta la suite de tests (Japa)
 
 ### Frontend (`cd frontend`)
 - `npm run dev` — Vite dev server en `http://localhost:5173`
@@ -43,8 +43,8 @@ conductor del máster AI4Devs. Monorepo con dos apps independientes:
 - Lógica **en controllers**, no en el archivo de rutas (`start/routes.ts` solo cablea).
 - Validación de input **siempre** con un validator de VineJS (`app/validators/`).
 - Serialización de salida **siempre** vía `UserTransformer` (`app/transformers/`),
-  nunca devolviendo el modelo crudo (el `password` se excluye, pero el contrato
-  de salida vive en un único sitio).
+  nunca devolviendo el modelo crudo.
+- Toda query con potencial de muchos resultados usa paginación (`.paginate()`).
 - Rutas bajo prefijo `/api/v1`. Las protegidas usan `middleware.auth()`.
 - Imports con subpath imports (`#controllers/*`, `#models/*`, …), no rutas relativas.
 

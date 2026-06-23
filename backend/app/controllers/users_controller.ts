@@ -1,7 +1,15 @@
 import type { HttpContext } from '@adonisjs/core/http'
+import { DateTime } from 'luxon'
 import User from '#models/user'
 import { UserTransformer } from '#transformers/user_transformer'
-import { DateTime } from 'luxon'
+import { listActiveUsersValidator } from '#validators/users'
+
+/**
+ * Ventana por defecto (en horas) para considerar a un usuario "activo".
+ */
+const ACTIVE_THRESHOLD_HOURS = 24
+const DEFAULT_PAGE = 1
+const DEFAULT_LIMIT = 20
 
 export default class UsersController {
   /**
@@ -24,28 +32,32 @@ export default class UsersController {
 
   /**
    * GET /api/v1/users/active
-   * Lista los usuarios vistos en las últimas 24 horas.
-   *
-   * ⚠️ ESTA VERSIÓN ES EL OBJETO DE REVIEW DE LA DEMO 1.
-   * Contiene 4 issues plantados a propósito (ver SETUP-DEMOS.md).
-   * NO es código de referencia correcto.
+   * Lista los usuarios vistos recientemente (por defecto, últimas 24h).
+   * El query param `since` (horas) permite ajustar la ventana.
    */
   async listActive({ request, response }: HttpContext) {
-    // ISSUE 1 (crítico): el query param `since` no se valida con VineJS.
-    // Se lee directamente de la request sin sanitizar ni acotar.
-    const since = request.input('since', 24)
+    // Validación del input con VineJS (sobre el query string).
+    const { since, page, limit } = await request.validateUsing(listActiveUsersValidator, {
+      data: request.qs(),
+    })
 
-    // ISSUE 3 (medio): magic number 24 sin constante con nombre.
-    const threshold = DateTime.now().minus({ hours: since })
+    const hours = since ?? ACTIVE_THRESHOLD_HOURS
+    const threshold = DateTime.now().minus({ hours })
 
-    // ISSUE 2 (crítico): query sin paginación. Puede devolver miles de filas.
+    // Paginación obligatoria: evita devolver conjuntos potencialmente enormes.
     const users = await User.query()
       .where('last_seen_at', '>', threshold.toSQL()!)
       .orderBy('last_seen_at', 'desc')
+      .paginate(page ?? DEFAULT_PAGE, limit ?? DEFAULT_LIMIT)
 
-    // ISSUE 4 (menor): no hay manejo explícito del caso "lista vacía"
-    // (no es un bug grave, pero el contrato de respuesta es inconsistente
-    // con el resto de endpoints).
-    return response.ok({ users: UserTransformer.collection(users) })
+    // Manejo explícito del caso vacío: contrato de respuesta consistente.
+    if (users.total === 0) {
+      return response.ok({ users: [], meta: users.getMeta() })
+    }
+
+    return response.ok({
+      users: UserTransformer.collection(users.all()),
+      meta: users.getMeta(),
+    })
   }
 }
