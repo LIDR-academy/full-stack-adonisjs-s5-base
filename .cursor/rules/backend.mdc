@@ -1,0 +1,11 @@
+---
+description: Convenciones del backend AdonisJS
+globs: ["backend/**/*.ts"]
+alwaysApply: false
+---
+
+- Usa VineJS para toda validación de entrada (`app/validators/`).
+- Los controllers orquestan; la lógica de negocio no va en `start/routes.ts`.
+- Nunca devuelvas un modelo Lucid crudo: serializa siempre con `UserTransformer`.
+- Toda query con potencial de muchos resultados usa `.paginate()`.
+- Imports con subpath imports (`#controllers/*`, `#models/*`), no rutas relativas.
