@@ -1,0 +1,27 @@
+{
+  // Configuración de markdownlint-cli2 para la documentación de FlowSync.
+  "config": {
+    "default": true,
+    // Longitud de línea: la prosa y las tablas superan 80 cols con normalidad.
+    "MD013": false,
+    // Permitimos HTML inline (usado en los diagramas Mermaid con <br/>).
+    "MD033": false,
+    // El primer encabezado no siempre es H1 (páginas con frontmatter title).
+    "MD041": false,
+    // Encabezados hermanos duplicados permitidos (p. ej. "### [option 1]" en ADRs).
+    "MD024": { "siblings_only": true },
+    // No exigimos estilo específico de numeración en listas ordenadas.
+    "MD029": false,
+    // Los bloques de árbol de directorios van sin lenguaje.
+    "MD040": false,
+    // No imponemos un estilo concreto de espaciado en las tablas.
+    "MD060": false
+  },
+  // No lintamos dependencias ni artefactos de build.
+  "ignores": [
+    "**/node_modules/**",
+    "**/dist/**",
+    "**/.astro/**",
+    "docs/site/README.md"
+  ]
+}
