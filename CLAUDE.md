@@ -28,6 +28,7 @@ conductor del máster AI4Devs. Monorepo con dos apps independientes:
 ## Comandos
 
 ### Backend (`cd backend`)
+
 - `npm run dev` — servidor con HMR en `http://localhost:3333`
 - `npm run migration:run` — aplica migraciones
 - `npm run migration:fresh` — recrea la BD desde cero
@@ -35,6 +36,7 @@ conductor del máster AI4Devs. Monorepo con dos apps independientes:
 - `node ace list:routes` — inspecciona el árbol de rutas
 
 ### Frontend (`cd frontend`)
+
 - `npm run dev` — Vite dev server en `http://localhost:5173`
 - `npm run build` — build de producción
 
@@ -52,6 +54,13 @@ conductor del máster AI4Devs. Monorepo con dos apps independientes:
 
 Flujo spec-driven con los slash commands `/opsx:propose`, `/opsx:apply`,
 `/opsx:archive`. La configuración vive en `openspec/config.yaml`.
+
+## Documentación actualizada (Context7 MCP)
+
+Para **AdonisJS 7, Lucid, VineJS y React 19**, usar **Context7 MCP** para obtener
+documentación actualizada (`use context7`) en lugar de confiar en conocimiento
+potencialmente desfasado. El servidor MCP está declarado a nivel de repo en
+`.mcp.json` (server `context7`), que Claude Code carga automáticamente.
 
 ## No hacer
 
