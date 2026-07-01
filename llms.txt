@@ -1,0 +1,31 @@
+# FlowSync
+
+> Starter kit full-stack con autenticación por access tokens, repo hilo conductor del máster AI4Devs (LIDR). Monorepo con un backend AdonisJS 7 (API JSON) y un frontend React 19 (SPA).
+
+FlowSync expone una API JSON bajo el prefijo `/api/v1` con autenticación por access
+tokens (`oat_*`). El stack backend es AdonisJS 7 + Lucid + SQLite (`better-sqlite3`) +
+VineJS + `@adonisjs/auth`; el frontend es React 19 + Vite + React Router + Tailwind v4.
+La documentación se genera de forma viva: OpenAPI + Scalar para la API, ADRs en formato
+MADR con log4brains, y un sitio Starlight que agrega todo.
+
+## Documentación
+
+- [README](README.md): visión general, arranque rápido, endpoints y diagramas de arquitectura (Mermaid).
+- [Memoria del proyecto (CLAUDE.md)](CLAUDE.md): stack, comandos, convenciones del backend y reglas para copilotos de IA.
+- [Guía de arranque](docs/site/src/content/docs/guides/getting-started.md): pasos para levantar backend, frontend y el sitio de docs.
+
+## API
+
+- [Referencia de la API](docs/site/src/content/docs/api/index.md): endpoints REST bajo `/api/v1`, esquema de errores y autenticación Bearer.
+- OpenAPI (documento): `http://localhost:3333/openapi` — especificación OpenAPI generada con adonis-autoswagger.
+- Scalar (UI interactiva): `http://localhost:3333/docs` — explorador de la API.
+
+## Decisiones de arquitectura (ADRs)
+
+- [Uso de SQLite + better-sqlite3 en lugar de PostgreSQL](docs/adr/20260701-uso-de-sqlite-better-sqlite3-en-lugar-de-postgresql.md): arranque zero-config manteniendo Lucid como ORM real.
+- [Uso de VineJS para validación en lugar de Zod](docs/adr/20260701-uso-de-vinejs-para-validacion-en-lugar-de-zod.md): integración nativa con AdonisJS 7 y `request.validateUsing()`.
+
+## Optional
+
+- [Configuración de log4brains](.log4brains.yml): proyecto y carpeta de ADRs (`docs/adr`).
+- [Servidor MCP Context7](.mcp.json): documentación actualizada de librerías para copilotos de IA.
