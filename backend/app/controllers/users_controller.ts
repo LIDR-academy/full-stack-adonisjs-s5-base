@@ -4,8 +4,12 @@ import { UserTransformer } from '#transformers/user_transformer'
 
 export default class UsersController {
   /**
-   * GET /api/v1/users
-   * Lista todos los usuarios. Requiere autenticación.
+   * @index
+   * GET /api/v1/users — Lista todos los usuarios. Requiere autenticación.
+   * @summary Listar usuarios
+   * @description Devuelve todos los usuarios ordenados por fecha de creación descendente. Requiere Bearer token.
+   * @responseBody 200 - <User[]> - Lista de usuarios (envuelta en { users }).
+   * @responseBody 401 - {"errors": [{"message": "Unauthorized access"}]} - No autenticado (E_UNAUTHORIZED_ACCESS): token ausente o inválido.
    */
   async index({ response }: HttpContext) {
     const users = await User.query().orderBy('created_at', 'desc')
@@ -13,8 +17,14 @@ export default class UsersController {
   }
 
   /**
-   * GET /api/v1/users/:id
-   * Devuelve un usuario por id. Requiere autenticación.
+   * @show
+   * GET /api/v1/users/:id — Devuelve un usuario por id. Requiere autenticación.
+   * @summary Obtener usuario por id
+   * @description Devuelve un usuario por su id. Requiere Bearer token.
+   * @paramPath id - Id numérico del usuario - @type(number) @required
+   * @responseBody 200 - <User> - Usuario encontrado (envuelto en { user }).
+   * @responseBody 401 - {"errors": [{"message": "Unauthorized access"}]} - No autenticado (E_UNAUTHORIZED_ACCESS): token ausente o inválido.
+   * @responseBody 404 - {"errors": [{"message": "Row not found"}]} - Usuario no encontrado (E_ROW_NOT_FOUND).
    */
   async show({ params, response }: HttpContext) {
     const user = await User.findOrFail(params.id)
