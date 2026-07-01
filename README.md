@@ -56,6 +56,45 @@ Abre `http://localhost:5173`, regístrate, entra al dashboard y cierra sesión.
 
 > El endpoint `GET /api/v1/users/active` se implementa en vivo en la Sesión 3.
 
+## Arquitectura
+
+### Diagrama de contexto (C4 nivel 1)
+
+Cómo se conectan las piezas de FlowSync y la naturaleza de cada conexión.
+
+```mermaid
+graph LR
+    User["👤 Usuario<br/>(navegador)"]
+    FE["Frontend<br/>React 19 + Vite<br/>(localhost:5173)"]
+    BE["Backend API<br/>AdonisJS 7 + Lucid + VineJS<br/>(localhost:3333, /api/v1)"]
+    DB[("SQLite<br/>better-sqlite3<br/>tmp/db.sqlite3")]
+
+    User -->|"HTTP · interfaz web"| FE
+    FE -->|"HTTP/JSON · Authorization: Bearer oat_*"| BE
+    BE -->|"Lucid ORM · SQL<br/>(users, auth_access_tokens)"| DB
+```
+
+### Secuencia del login
+
+Flujo real de `POST /api/v1/account/login` (ver `backend/app/controllers/access_tokens_controller.ts`).
+
+```mermaid
+sequenceDiagram
+    actor Cliente
+    participant API as Backend AdonisJS 7 (AccessTokensController)
+    participant DB as SQLite (Lucid)
+
+    Cliente->>API: POST /api/v1/account/login { email, password }
+    API->>API: validateUsing(loginValidator) · VineJS
+    API->>DB: User.verifyCredentials(email, password)
+    DB-->>API: user (hash scrypt verificado)
+    API->>DB: UPDATE users SET last_seen_at (user.save())
+    DB-->>API: ok
+    API->>DB: User.accessTokens.create(user)<br/>INSERT auth_access_tokens
+    DB-->>API: token (oat_*)
+    API-->>Cliente: 200 { user, token }
+```
+
 ## Workflow con OpenSpec
 
 Flujo spec-driven con Claude Code o Cursor:
