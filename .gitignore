@@ -2,6 +2,9 @@ node_modules
 .DS_Store
 *.log
 
+# Log4brains (salida de build de la knowledge base)
+.log4brains
+
 # Backend
 backend/.env
 backend/tmp
