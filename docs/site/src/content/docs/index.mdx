@@ -1,0 +1,43 @@
+---
+title: FlowSync Docs
+description: Documentación viva de FlowSync — starter kit full-stack AI4Devs (AdonisJS 7 + React 19).
+template: splash
+hero:
+  tagline: Documentación viva del starter kit FlowSync (AdonisJS 7 + Lucid + React 19).
+  image:
+    file: ../../assets/houston.webp
+  actions:
+    - text: Empezar
+      link: /guides/getting-started/
+      icon: right-arrow
+    - text: API Reference
+      link: /api/
+      icon: open-book
+      variant: minimal
+---
+
+import { Card, CardGrid } from '@astrojs/starlight/components';
+
+## ¿Qué es FlowSync?
+
+FlowSync es un starter kit full-stack con autenticación por **access tokens**, repo
+hilo conductor del máster **AI4Devs** (LIDR). Este sitio centraliza su documentación:
+guías de arranque, referencia de la API y las decisiones de arquitectura (ADRs).
+
+<CardGrid stagger>
+	<Card title="Guías" icon="pencil">
+		Cómo arrancar el backend y el frontend en local. Ver
+		[Empezar](/guides/getting-started/).
+	</Card>
+	<Card title="API Reference" icon="open-book">
+		Endpoints REST bajo `/api/v1`, documentados con OpenAPI + Scalar. Ver
+		[API Reference](/api/).
+	</Card>
+	<Card title="Decisiones (ADRs)" icon="approve-check">
+		Registro de decisiones de arquitectura en formato MADR, gestionado con
+		log4brains. Ver [Decisiones](/adr/).
+	</Card>
+	<Card title="Stack" icon="setting">
+		AdonisJS 7 · Lucid · SQLite · VineJS · @adonisjs/auth · React 19 · Vite.
+	</Card>
+</CardGrid>
